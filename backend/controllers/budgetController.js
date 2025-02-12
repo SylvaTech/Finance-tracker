@@ -1,6 +1,12 @@
 const Budget = require('../models/Budget');
+const {validationResult}= require('express-validator');
 
 exports.createBudget = async (req, res) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { category, limit } = req.body;
   try {
     const budget = new Budget({

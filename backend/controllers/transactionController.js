@@ -1,10 +1,17 @@
 const Transaction = require('../models/Transaction');
+const { validationResult } = require('express-validator');
 
 exports.createTransaction = async (req, res) => {
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  
   const { type, category, amount, description } = req.body;
   try {
     const transaction = new Transaction({
-      userId: req.user.id, // Assuming user ID is available from authentication middleware
+      userId: req.user.id, // Because user ID is available in authentication middleware
       type,
       category,
       amount,
