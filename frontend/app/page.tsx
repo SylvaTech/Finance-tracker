@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import axios from "axios";
+import api from '../utils/api';
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
+  const router = useRouter();
   const [showForm, setShowForm] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,10 +18,11 @@ export default function Home() {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
-      alert("Login successful! Token: " + res.data.token);
+      const res = await api.post('/auth/login', { email, password });
+      localStorage.setItem('token', res.data.token); // Store the token
+      router.push('/dashboard'); // Redirect to the dashboard
     } catch (err) {
-      alert("Login failed: " + err.response.data.error);
+      alert('Login failed: ' + err.response?.data?.error || 'Something went wrong');
     }
   };
 
@@ -27,11 +30,19 @@ export default function Home() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     console.log(formData);
+    try {
+      const res = await api.post('/auth/register', formData);
+      localStorage.setItem('token', res.data.token); // Store the token
+      router.push('/dashboard'); // Redirect to the dashboard
+    } catch (err) {
+      alert('Registration failed: ' + err.response?.data?.error || 'Something went wrong');
+    }
     setShowForm(false); // Close the form after submission
   };
+
 
   return (
     <div className="flex flex-col items-center  min-h-screen bg-gray-100 p-4 relative">
@@ -77,7 +88,7 @@ export default function Home() {
         >
           <div className="w-full max-w-md p-6 bg-white shadow-lg rounded-2xl">
             <h2 className="text-2xl font-bold text-center mb-4">Register</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleRegister} className="space-y-4">
               <div>
                 <label className="block font-semibold">Name</label>
                 <input 
