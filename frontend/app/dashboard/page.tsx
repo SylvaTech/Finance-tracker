@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
-import api from '../../utils/api';
+import api from '@/utils/api';
+import AnalyticsDashboard from '@/app/components/AnalyticsDashboard';
 import { useRouter } from 'next/navigation';
 
 export default function Dashboard() {
@@ -37,6 +38,7 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <AnalyticsDashboard />
       <div className="w-full max-w-2xl">
         <div className="bg-white p-4 mb-4 rounded shadow">
           <h2 className="text-xl font-bold mb-2">Add Transaction</h2>

@@ -52,3 +52,31 @@ exports.deleteTransaction = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// Generate Aggregate data for visualisation 
+
+exports.getTransactionAnalytics = async (req, res) => {
+  try {
+    const transactions = await Transaction.find({ userId: req.user.id });
+
+    // Aggregate data
+    const totalIncome = transactions
+      .filter((t) => t.type === 'income')
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const totalExpenses = transactions
+      .filter((t) => t.type === 'expense')
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const spendingByCategory = transactions
+      .filter((t) => t.type === 'expense')
+      .reduce((acc, t) => {
+        acc[t.category] = (acc[t.category] || 0) + t.amount;
+        return acc;
+      }, {});
+
+    res.json({ totalIncome, totalExpenses, spendingByCategory });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
