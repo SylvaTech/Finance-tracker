@@ -1,18 +1,27 @@
 import { useEffect, useState } from 'react';
 import { Doughnut, Bar } from 'react-chartjs-2';
-import { 
-    Chart as ChartJS, 
-    ArcElement, 
-    Tooltip, 
-    Legend, 
-    CategoryScale, 
-    LinearScale, 
-    BarElement 
-  } from 'chart.js';
-  import api from '@/utils/api';
-  
-  // Register required Chart.js components
-  ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
+import api from '@/utils/api';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+} from 'chart.js';
+
+// Register Chart.js components
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title
+);
 
 const AnalyticsDashboard = () => {
   const [analytics, setAnalytics] = useState({ totalIncome: 0, totalExpenses: 0, spendingByCategory: {} });
@@ -36,7 +45,9 @@ const AnalyticsDashboard = () => {
     datasets: [
       {
         data: [analytics.totalIncome, analytics.totalExpenses],
-        backgroundColor: ['#4CAF50', '#F44336'],
+        backgroundColor: ['#4ADE80', '#F87171'], // Green for income, red for expenses
+        borderColor: ['#0f172a', '#0f172a'], // Dark border to match the theme
+        borderWidth: 2,
       },
     ],
   };
@@ -48,23 +59,51 @@ const AnalyticsDashboard = () => {
       {
         label: 'Spending by Category',
         data: Object.values(analytics.spendingByCategory),
-        backgroundColor: '#2196F3',
+        backgroundColor: '#60A5FA', // Blue bars
+        borderColor: '#0f172a', // Dark border to match the theme
+        borderWidth: 2,
       },
     ],
   };
 
+  // Chart options for dark theme
+  const chartOptions = {
+    plugins: {
+      legend: {
+        labels: {
+          color: '#f8fafc', // White text for legends
+        },
+      },
+    },
+    scales: {
+      y: {
+        ticks: {
+          color: '#f8fafc', // White text for y-axis
+        },
+        grid: {
+          color: '#334155', // Dark grid lines
+        },
+      },
+      x: {
+        ticks: {
+          color: '#f8fafc', // White text for x-axis
+        },
+        grid: {
+          color: '#334155', // Dark grid lines
+        },
+      },
+    },
+  };
+
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Analytics</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white p-4 rounded shadow">
-          <h3 className="text-xl font-bold mb-2">Income vs. Expenses</h3>
-          <Doughnut data={incomeExpenseData} />
-        </div>
-        <div className="bg-white p-4 rounded shadow">
-          <h3 className="text-xl font-bold mb-2">Spending by Category</h3>
-          <Bar data={spendingByCategoryData} />
-        </div>
+    <div>
+      <h3 className="text-xl font-bold mb-4 text-white">Income vs. Expenses</h3>
+      <div className="mb-8">
+        <Doughnut data={incomeExpenseData} options={chartOptions} />
+      </div>
+      <h3 className="text-xl font-bold mb-4 text-white">Spending by Category</h3>
+      <div>
+        <Bar data={spendingByCategoryData} options={chartOptions} />
       </div>
     </div>
   );
