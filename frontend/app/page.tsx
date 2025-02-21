@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import api from '@/utils/api';
 import { useRouter } from 'next/navigation';
+import ThemeToggle from "@/app/components/ThemeToggle";
 
 export default function Home() {
   const router = useRouter();
@@ -79,6 +80,10 @@ export default function Home() {
           >
             Register
           </button>
+           {/* Theme Toggle Button */}
+           <div className="mt-4">
+            <ThemeToggle />
+          </div>
         </motion.div>
       )}
       {showForm && (
