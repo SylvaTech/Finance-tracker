@@ -2,18 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Default Light Theme */
+/* Default Light Mode Styles */
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-/* Dark Mode */
-.dark {
-  --background: #0f172a;
-  --foreground: #f8fafc;
+/* Dark Mode Overrides */
+[data-theme="dark"] {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
+/* Apply to body */
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -21,7 +22,7 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Glassmorphism for Dark and Light Mode */
+/* Glassmorphism effect */
 .glassmorphism {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -29,13 +30,14 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.dark .glassmorphism {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Neumorphism */
+/* Neumorphic styling */
 .neumorphic {
   background: var(--background);
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.1);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5), -5px -5px 10px rgba(255, 255, 255, 0.1);
+}
+
+/* Focus outlines for accessibility */
+button:focus {
+  outline: 2px solid #facc15;
+  outline-offset: 2px;
 }
